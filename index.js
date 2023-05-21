@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { MongoClient, ServerApiVersion } from "mongodb";
+import { MongoClient, ObjectId, ServerApiVersion } from "mongodb";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -57,6 +57,15 @@ const run = async () => {
     app.post("/createAProjectInfo", async (req, res) => {
       const projectInfo = req.body;
       const result = await projectInfoCollection.insertOne(projectInfo);
+      res.send(result);
+    });
+
+    // delete project
+    app.delete("/deleteAProjectInfo", async (req, res) => {
+      const projectUserEmail = req.query?.userEmail;
+      const projectId = req.query.projectId;
+      const _id = new ObjectId(projectId);
+      const result = await projectInfoCollection.deleteOne({ _id });
       res.send(result);
     });
 
